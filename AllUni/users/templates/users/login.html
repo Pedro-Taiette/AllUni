@@ -1,6 +1,65 @@
-<h2>Login</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Entrar</button>
-</form>
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto mt-12 px-4">
+    <div class="max-w-sm w-full mx-auto bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+        <h2 class="text-3xl font-semibold text-gray-800 text-center mb-6">Entrar no AllUni</h2>
+        
+        {% if form.non_field_errors %}
+            <div class="mb-4 text-red-600 text-sm bg-red-100 p-2 rounded-md">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <form method="POST" novalidate>
+            {% csrf_token %}
+            
+            <!-- Username -->
+            <div class="mb-4">
+                <label for="username" class="block text-sm font-medium text-gray-600">Usuário</label>
+                <input 
+                    type="text" 
+                    name="username" 
+                    id="username" 
+                    value="{{ form.username.value|default_if_none:'' }}" 
+                    class="mt-2 block w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 {% if form.username.errors %}border-red-500{% endif %}" 
+                    required
+                >
+                {% if form.username.errors %}
+                    <p class="text-red-500 text-sm mt-1">
+                        {{ form.username.errors.0 }}
+                    </p>
+                {% endif %}
+            </div>
+
+            <!-- Password -->
+            <div class="mb-6">
+                <label for="password" class="block text-sm font-medium text-gray-600">Senha</label>
+                <input 
+                    type="password" 
+                    name="password" 
+                    id="password" 
+                    class="mt-2 block w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 {% if form.password.errors %}border-red-500{% endif %}" 
+                    required
+                >
+                {% if form.password.errors %}
+                    <p class="text-red-500 text-sm mt-1">
+                        {{ form.password.errors.0 }}
+                    </p>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline mb-4">
+                Entrar
+            </button>
+
+            <p class="text-sm text-center text-gray-500">
+                Não tem uma conta? 
+                <a href="{% url 'register' %}" class="text-indigo-600 hover:underline">Registre-se</a>
+            </p>
+        </form>
+    </div>
+</div>
+{% endblock %}
