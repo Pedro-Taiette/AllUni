@@ -1,0 +1,11 @@
+<!-- users/templates/users/add_subject.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Adicionar Matéria</h1>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Salvar</button>
+  </form>
+{% endblock %}

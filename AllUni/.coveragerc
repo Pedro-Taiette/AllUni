@@ -8,3 +8,6 @@ omit =
     */settings.py
     */wsgi.py
     */asgi.py
+    */admin.py
+    */apps.py
+    users/models.py #Herdado do Django

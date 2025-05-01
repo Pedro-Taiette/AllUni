@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto mt-12 px-6">
+    <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-100">
+        <h2 class="text-3xl font-semibold text-gray-800 mb-4">Minhas Matérias</h2>
+        
+        <!-- Verifica se há subjects -->
+        {% if subjects %}
+            <ul>
+                {% for subject in subjects %}
+                    <li>{{ subject.name }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-gray-600">Nenhum assunto encontrado.</p>
+        {% endif %}
+        
+        <a href="{% url 'add_subject' %}" class="btn btn-primary">Adicionar Matéria</a>
+    </div>
+</div>
+{% endblock %}
