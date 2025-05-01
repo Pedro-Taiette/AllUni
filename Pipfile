@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 django = "*"
+markdown2 = "*"
 
 [dev-packages]
 coverage = "*"

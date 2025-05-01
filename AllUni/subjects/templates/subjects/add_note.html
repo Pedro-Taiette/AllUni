@@ -1,0 +1,11 @@
+<!-- users/templates/users/add_note.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Adicionar Anotação para {{ subject.name }}</h1>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Salvar</button>
+  </form>
+{% endblock %}
