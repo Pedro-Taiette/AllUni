@@ -2,3 +2,9 @@
 branch = True
 omit =
     manage.py
+    */migrations/*
+    */tests.py
+    */__init__.py
+    */settings.py
+    */wsgi.py
+    */asgi.py
