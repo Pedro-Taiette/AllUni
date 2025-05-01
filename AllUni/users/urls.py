@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
-from .views import register_view, dashboard_view
+from users.views import register_view, dashboard_view
 
 urlpatterns = [
     path('register/', register_view, name='register'),
