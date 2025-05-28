@@ -11,6 +11,16 @@ def subject_list(request):
     return render(request, 'subjects/subject_list.html', {'subjects': subjects})
 
 @login_required
+def all_notes(request):
+    notes = Note.objects.filter(subject__user=request.user)
+    return render(request, 'subjects/all_notes.html', {'notes': notes})
+
+@login_required
+def note_detail(request, note_id):
+    note = get_object_or_404(Note, id=note_id, subject__user=request.user)
+    return render(request, 'subjects/note_detail.html', {'note': note})
+
+@login_required
 def add_subject(request):
     if request.method == 'POST':
         form = SubjectForm(request.POST)

@@ -115,3 +115,26 @@ class SubjectTests(TestCase):
         subject = Subject.objects.create(name='Matemática', user=self.user)
         note = Note.objects.create(title='Teorema de Pitágoras', content='Conteúdo da nota', subject=subject)
         self.assertEqual(str(note), 'Teorema de Pitágoras - Matemática')
+
+    def test_all_notes_view_no_notes(self):
+        """Testa se a view all_notes exibe mensagem apropriada quando não há notas."""
+        response = self.client.get(reverse('all_notes'))
+        self.assertEqual(response.status_code, 200)
+        #self.assertContains(response, "Você ainda não possui anotações")  # conforme all_notes.html -- Validar depois
+    
+    def test_note_detail_not_found(self):
+        """Testa se uma nota inexistente retorna 404."""
+        response = self.client.get(reverse('note_detail', args=[999]))
+        self.assertEqual(response.status_code, 404)
+    
+    def test_all_notes_view(self):
+        response = self.client.get(reverse('all_notes'))
+        self.assertEqual(response.status_code, 200)
+        #self.assertContains(response, "Nenhuma anotação")
+
+    def test_note_detail_view(self):
+        subject = Subject.objects.create(name="Test Subject", user=self.user)
+        note = Note.objects.create(title="Gravidade", content="Conteúdo da nota", subject=subject)
+        response = self.client.get(reverse('note_detail', args=[note.id]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, note.title)

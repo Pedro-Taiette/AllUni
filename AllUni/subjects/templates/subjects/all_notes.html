@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Todas as Anotações</h1>
+  <ul>
+    {% for note in notes %}
+      <li>
+        <a href="{% url 'note_detail' note.id %}">{{ note.title }} ({{ note.subject.name }})</a>
+      </li>
+    {% empty %}
+      <li>Você ainda não possui anotações.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
