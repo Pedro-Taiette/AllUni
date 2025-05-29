@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto mt-8 px-6">
+    <h2 class="text-3xl font-semibold text-gray-800 mb-2">Resultados da pesquisa</h2>
+    <p class="text-gray-600 mb-6">Resultados para: "{{ query }}"</p>
+    
+    <!-- Formulário de pesquisa -->
+    <div class="mb-8">
+        <form method="get" action="{% url 'search' %}">
+            <div class="flex">
+                <input type="text" name="q" placeholder="Pesquisar matérias e anotações..." 
+                       class="flex-grow px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                       value="{{ query }}">
+                <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-r-lg hover:bg-indigo-700">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    {% if subjects or notes %}
+        <!-- Resultados de matérias -->
+        {% if subjects %}
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">Matérias ({{ subjects|length }})</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {% for subject in subjects %}
+                <a href="{% url 'subject_detail' subject.id %}" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition duration-300">
+                    <h4 class="text-lg font-medium text-gray-800">{{ subject.name }}</h4>
+                    {% if subject.code %}
+                    <span class="text-sm text-gray-600">{{ subject.code }}</span>
+                    {% endif %}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Resultados de anotações -->
+        {% if notes %}
+        <div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">Anotações ({{ notes|length }})</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {% for note in notes %}
+                <a href="{% url 'note_detail' note.id %}" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition duration-300">
+                    <h4 class="text-lg font-medium text-gray-800">{{ note.title }}</h4>
+                    <p class="text-sm text-gray-600 mb-2">{{ note.subject.name }}</p>
+                    <div class="text-sm text-gray-700 line-clamp-2">
+                        {{ note.get_html_content|safe|truncatewords_html:15 }}
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    {% else %}
+        <div class="bg-white p-8 rounded-lg shadow-md text-center">
+            <div class="text-gray-400 text-6xl mb-4">
+                <i class="fas fa-search"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-700 mb-2">Nenhum resultado encontrado</h3>
+            <p class="text-gray-600">Tente usar termos diferentes na sua pesquisa.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

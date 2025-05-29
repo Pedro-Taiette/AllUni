@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "a75364ae0bde9e228f28d749d6766d9eb23ea14805d8df397a953d2a0d8f6771"
+            "sha256": "74d4f9d4e19c5123fae568246dfd13ee818a938c5a7a19fc450858a7af6082ce"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -33,6 +33,13 @@
             "markers": "python_version >= '3.10'",
             "version": "==5.2"
         },
+        "django-simplemde": {
+            "hashes": [
+                "sha256:5da5f837a42a4102eef46e2f9af8c7d93869a2540542944fad37650865fe45d7"
+            ],
+            "index": "pypi",
+            "version": "==0.1.4"
+        },
         "markdown2": {
             "hashes": [
                 "sha256:4d502953a4633408b0ab3ec503c5d6984d1b14307e32b325ec7d16ea57524895",
@@ -41,6 +48,14 @@
             "index": "pypi",
             "markers": "python_version >= '3.9' and python_version < '4'",
             "version": "==2.5.3"
+        },
+        "setuptools": {
+            "hashes": [
+                "sha256:062d34222ad13e0cc312a4c02d73f059e86a4acbfbdea8f8f76b28c99f306922",
+                "sha256:f36b47402ecde768dbfafc46e8e4207b4360c654f1f3bb84475f0a28628fb19c"
+            ],
+            "markers": "python_version >= '3.9'",
+            "version": "==80.9.0"
         },
         "sqlparse": {
             "hashes": [
