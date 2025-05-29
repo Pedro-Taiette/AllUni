@@ -1,90 +1,170 @@
 {% extends 'base.html' %}
 
+{% block title %}Dashboard | AllUni{% endblock %}
+
 {% block content %}
-<div class="container mx-auto px-4 mt-8">
-    <div class="max-w-5xl mx-auto bg-white p-6 rounded-xl shadow-lg border border-gray-300">
-
-        <!-- Mini Agenda / Data e Hora - No começo -->
-        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-300 mb-8">
-            <h3 class="text-xl font-semibold text-gray-700 mb-4">Mini Agenda</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                <!-- Data e Hora -->
-                <div class="bg-gray-100 p-4 rounded-lg shadow-sm border border-gray-200">
-                    <h4 class="text-lg font-medium text-gray-800 mb-3">Data e Hora</h4>
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-2xl font-semibold text-gray-800" id="current-date"></p>
-                            <p class="text-lg text-gray-500" id="current-time"></p>
-                        </div>
-                        <div class="text-center">
-                            <p class="text-md text-gray-600 font-semibold" id="current-day"></p>
-                        </div>
-                    </div>
+<div class="container mx-auto">
+    <!-- Saudação -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Olá, {{ user.first_name|default:user.username }}</h1>
+        <p class="text-gray-600">Bem-vindo ao seu espaço de estudos.</p>
+    </div>
+    
+    <!-- Cards de estatísticas -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-indigo-500">
+            <div class="flex justify-between items-center">
+                <div>
+                    <p class="text-gray-500 text-sm">Total de Matérias</p>
+                    <h2 class="text-3xl font-bold text-gray-800">{{ subject_count }}</h2>
                 </div>
-
+                <div class="bg-indigo-100 p-3 rounded-full">
+                    <i class="fas fa-book text-indigo-500 text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4">
+                <a href="{% url 'subject_list' %}" class="text-indigo-600 hover:text-indigo-800 text-sm">
+                    Ver todas <i class="fas fa-arrow-right ml-1"></i>
+                </a>
             </div>
         </div>
-
-        <!-- Saudação -->
-        <div class="text-center mb-8">
-            <h2 class="text-3xl font-semibold text-gray-800 mb-2">Olá, {{ user.first_name|default:user.username }} 👋</h2>
-            <p class="text-gray-600 text-lg">Bem-vindo à sua área de estudante no <strong>AllUni</strong>.</p>
-        </div>
-
-        <!-- Cards principais -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-
-            <!-- Card de Matérias -->
-            <div class="bg-teal-50 p-6 rounded-lg shadow-md border border-teal-200 transform transition duration-300 hover:scale-105">
-                <div class="flex items-center justify-between mb-4">
-                    <span class="text-3xl text-teal-700">📚</span>
-                    <h4 class="text-lg font-semibold text-teal-800">Matérias</h4>
+        
+        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+            <div class="flex justify-between items-center">
+                <div>
+                    <p class="text-gray-500 text-sm">Total de Anotações</p>
+                    <h2 class="text-3xl font-bold text-gray-800">{{ note_count }}</h2>
                 </div>
-                <p class="text-2xl font-bold text-teal-800">{{ subject_count|default:"0" }}</p>
-                <a href="{% url 'subject_list' %}" class="text-teal-600 hover:text-teal-700 mt-2 inline-block text-sm">Ver todas as matérias</a>
-            </div>
-
-            <!-- Card de Anotações -->
-            <div class="bg-indigo-50 p-6 rounded-lg shadow-md border border-indigo-200 transform transition duration-300 hover:scale-105">
-                <div class="flex items-center justify-between mb-4">
-                    <span class="text-3xl text-indigo-700">📝</span>
-                    <h4 class="text-lg font-semibold text-indigo-800">Anotações</h4>
+                <div class="bg-green-100 p-3 rounded-full">
+                    <i class="fas fa-sticky-note text-green-500 text-xl"></i>
                 </div>
-                <p class="text-2xl font-bold text-indigo-800">{{ note_count|default:"0" }}</p>
-                <a href="{% url 'subject_list' %}" class="text-indigo-600 hover:text-indigo-700 mt-2 inline-block text-sm">Ver todas as anotações</a>
             </div>
-
+            <div class="mt-4">
+                <a href="{% url 'all_notes' %}" class="text-green-600 hover:text-green-800 text-sm">
+                    Ver todas <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
         </div>
-
-        <!-- Botão para adicionar nova matéria -->
-        <div class="mt-6 text-center">
-            <a href="{% url 'add_subject' %}" class="inline-block bg-teal-600 text-white py-2 px-6 rounded-full text-lg font-medium hover:bg-teal-700 transition duration-300 ease-in-out shadow-lg transform hover:scale-105">
-                ➕ Adicionar Nova Matéria
+        
+        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-yellow-500">
+            <div class="flex justify-between items-center">
+                <div>
+                    <p class="text-gray-500 text-sm">Data Atual</p>
+                    <h2 class="text-xl font-bold text-gray-800" id="current-date"></h2>
+                </div>
+                <div class="bg-yellow-100 p-3 rounded-full">
+                    <i class="fas fa-calendar text-yellow-500 text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4">
+                <p class="text-gray-600 text-sm" id="current-time"></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Ações rápidas -->
+    <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Ações Rápidas</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <a href="{% url 'add_subject' %}" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-300">
+                <div class="bg-indigo-100 p-3 rounded-full mr-4">
+                    <i class="fas fa-plus text-indigo-500"></i>
+                </div>
+                <div>
+                    <h4 class="font-medium text-gray-800">Nova Matéria</h4>
+                    <p class="text-sm text-gray-600">Adicione uma nova matéria ao seu catálogo</p>
+                </div>
+            </a>
+            
+            {% if recent_subjects %}
+            <a href="{% url 'add_note' recent_subjects.0.id %}" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-300">
+                <div class="bg-green-100 p-3 rounded-full mr-4">
+                    <i class="fas fa-edit text-green-500"></i>
+                </div>
+                <div>
+                    <h4 class="font-medium text-gray-800">Nova Anotação</h4>
+                    <p class="text-sm text-gray-600">Para {{ recent_subjects.0.name }}</p>
+                </div>
+            </a>
+            {% else %}
+            <div class="flex items-center p-4 border border-gray-200 rounded-lg bg-gray-50">
+                <div class="bg-gray-200 p-3 rounded-full mr-4">
+                    <i class="fas fa-edit text-gray-400"></i>
+                </div>
+                <div>
+                    <h4 class="font-medium text-gray-400">Nova Anotação</h4>
+                    <p class="text-sm text-gray-500">Adicione uma matéria primeiro</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Matérias recentes -->
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-semibold text-gray-800">Matérias Recentes</h3>
+            <a href="{% url 'subject_list' %}" class="text-indigo-600 hover:text-indigo-800 text-sm">
+                Ver todas <i class="fas fa-arrow-right ml-1"></i>
             </a>
         </div>
-
+        
+        {% if recent_subjects %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead>
+                    <tr class="bg-gray-50">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Código</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anotações</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for subject in recent_subjects %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">{{ subject.name }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-500">{{ subject.code|default:"-" }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-500">{{ subject.notes.count }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <a href="{% url 'subject_detail' subject.id %}" class="text-indigo-600 hover:text-indigo-900 mr-3">Detalhes</a>
+                            <a href="{% url 'add_note' subject.id %}" class="text-green-600 hover:text-green-900">+ Nota</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-8">
+            <p class="text-gray-500">Você ainda não tem matérias cadastradas.</p>
+            <a href="{% url 'add_subject' %}" class="mt-4 inline-block bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 transition duration-300">
+                Adicionar Matéria
+            </a>
+        </div>
+        {% endif %}
     </div>
 </div>
+{% endblock %}
 
-<!-- JavaScript para mostrar data e hora -->
+{% block extra_js %}
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const currentDateElement = document.getElementById("current-date");
-        const currentTimeElement = document.getElementById("current-time");
-        const currentDayElement = document.getElementById("current-day");
-
-        function updateDateTime() {
-            const currentDate = new Date();
-            
-            currentDateElement.textContent = currentDate.toLocaleDateString('pt-BR');
-            currentTimeElement.textContent = currentDate.toLocaleTimeString('pt-BR');
-            currentDayElement.textContent = currentDate.toLocaleString('pt-BR', { weekday: 'long' });
-        }
-
-        setInterval(updateDateTime, 1000);
-        updateDateTime();
-    });
+    function updateDateTime() {
+        const now = new Date();
+        const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const timeOptions = { hour: '2-digit', minute: '2-digit' };
+        
+        document.getElementById('current-date').textContent = now.toLocaleDateString('pt-BR', dateOptions);
+        document.getElementById('current-time').textContent = now.toLocaleTimeString('pt-BR', timeOptions);
+    }
+    
+    updateDateTime();
+    setInterval(updateDateTime, 60000);
 </script>
-
 {% endblock %}
