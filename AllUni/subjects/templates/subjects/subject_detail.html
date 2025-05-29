@@ -1,6 +1,44 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="mb-6">
+    <form method="get" action="{% url 'search' %}">
+        <div class="flex">
+            <input type="text" name="q" placeholder="Pesquisar matérias e anotações..." 
+                   class="flex-grow px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                   value="{{ request.GET.q|default:'' }}">
+            <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-r-lg hover:bg-indigo-700">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+<div class="container mx-auto px-6 mb-4">
+    <div class="flex items-center text-sm text-gray-600">
+        <a href="{% url 'dashboard' %}" class="hover:text-indigo-600">Dashboard</a>
+        
+        {% if subject %}
+        <span class="mx-2">/</span>
+        <a href="{% url 'subject_list' %}" class="hover:text-indigo-600">Matérias</a>
+        <span class="mx-2">/</span>
+        <a href="{% url 'subject_detail' subject.id %}" class="hover:text-indigo-600">{{ subject.name }}</a>
+        
+        {% if note %}
+        <span class="mx-2">/</span>
+        <span class="text-gray-800">{{ note.title }}</span>
+        {% endif %}
+        
+        {% elif notes %}
+        <span class="mx-2">/</span>
+        <span class="text-gray-800">Todas as Anotações</span>
+        {% elif view == 'subject_list' %}
+        <span class="mx-2">/</span>
+        <span class="text-gray-800">Matérias</span>
+        {% endif %}
+    </div>
+</div>
+
 <div class="container mx-auto mt-12 px-6">
     <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
         <h2 class="text-3xl font-semibold text-gray-800 mb-4">{{ subject.name }}</h2>

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
-import markdown2
 from .models import Subject, Note
 from .forms import SubjectForm, NoteForm
 
@@ -37,7 +37,7 @@ def add_subject(request):
 def subject_detail(request, subject_id):
     subject = get_object_or_404(Subject, id=subject_id, user=request.user)
     notes = subject.notes.all()
-    notes_html = [{'title': note.title, 'content': markdown2.markdown(note.content)} for note in notes]
+    notes_html = [{'title': note.title, 'content': note.get_html_content()} for note in notes]
     
     return render(request, 'subjects/subject_detail.html', {
         'subject': subject,
@@ -57,3 +57,28 @@ def add_note(request, subject_id):
     else:
         form = NoteForm()
     return render(request, 'subjects/add_note.html', {'form': form, 'subject': subject})
+
+@login_required
+def search(request):
+    query = request.GET.get('q', '')
+    subjects = []
+    notes = []
+    
+    if query:
+        subjects = Subject.objects.filter(
+            user=request.user,
+            name__icontains=query
+        )
+        
+        notes = Note.objects.filter(
+            subject__user=request.user
+        ).filter(
+            Q(title__icontains=query) | Q(content__icontains=query)
+        )
+    
+    return render(request, 'subjects/search_results.html', {
+        'query': query,
+        'subjects': subjects,
+        'notes': notes,
+    })
+

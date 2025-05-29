@@ -18,3 +18,8 @@ class Note(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.subject.name}"
+    
+    def get_html_content(self):
+        """Converte o conteúdo Markdown para HTML."""
+        import markdown2
+        return markdown2.markdown(self.content)

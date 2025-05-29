@@ -138,3 +138,55 @@ class SubjectTests(TestCase):
         response = self.client.get(reverse('note_detail', args=[note.id]))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, note.title)
+
+    def test_search_view_no_query(self):
+        """Testa se a view de pesquisa funciona sem uma consulta."""
+        response = self.client.get(reverse('search'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Resultados da pesquisa")
+        self.assertEqual(len(response.context['subjects']), 0)
+        self.assertEqual(len(response.context['notes']), 0)
+
+    def test_search_view_with_query(self):
+        """Testa se a view de pesquisa retorna resultados corretos."""
+        subject1 = Subject.objects.create(name="Matemática", user=self.user)
+        subject2 = Subject.objects.create(name="Física", user=self.user)
+        Note.objects.create(title="Álgebra", content="Conteúdo sobre álgebra", subject=subject1)
+        Note.objects.create(title="Geometria", content="Conteúdo sobre geometria", subject=subject1)
+        Note.objects.create(title="Mecânica", content="Conteúdo sobre mecânica", subject=subject2)
+        
+        response = self.client.get(reverse('search') + '?q=mate')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context['subjects']), 1)
+        self.assertEqual(response.context['subjects'][0].name, "Matemática")
+
+        response = self.client.get(reverse('search') + '?q=álgebra')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context['notes']), 1)
+        self.assertEqual(response.context['notes'][0].title, "Álgebra")
+
+        response = self.client.get(reverse('search') + '?q=geometria')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context['notes']), 1)
+        self.assertEqual(response.context['notes'][0].title, "Geometria")
+
+    def test_search_view_no_results(self):
+        """Testa se a view de pesquisa lida corretamente com consultas sem resultados."""
+        Subject.objects.create(name="Matemática", user=self.user)
+        
+        response = self.client.get(reverse('search') + '?q=história')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context['subjects']), 0)
+        self.assertEqual(len(response.context['notes']), 0)
+        self.assertContains(response, "Nenhum resultado encontrado")
+
+    def test_search_view_requires_login(self):
+        """Testa se a view de pesquisa requer login."""
+        self.client.logout()
+        response = self.client.get(reverse('search'))
+        self.assertRedirects(response, '/login/?next=/subjects/search/')
+    
+    def test_subject_list_no_subjects(self):
+        """Testa se a lista de subjects está vazia quando o usuário não tem subjects."""
+        response = self.client.get(reverse('subject_list'))
+        self.assertContains(response, "Nenhuma matéria encontrada")
