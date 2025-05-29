@@ -26,7 +26,7 @@
             </div>
             
             <div class="prose max-w-none text-gray-600 line-clamp-3 mb-4">
-                {{ note.content|safe }}
+                {{ note.get_html_content|safe }}
             </div>
             
             <div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">

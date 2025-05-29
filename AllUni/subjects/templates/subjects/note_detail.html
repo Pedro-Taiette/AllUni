@@ -32,7 +32,7 @@
             </li>
         </ol>
     </nav>
-    
+
     <!-- Conteúdo da nota -->
     <div class="bg-white p-6 rounded-lg shadow-md">
         <div class="flex justify-between items-center mb-6">
@@ -62,7 +62,7 @@
             </div>
         </div>
         
-        <div class="prose max-w-none">
+        <div class="prose max-w-none markdown-content">
             {{ note.get_html_content|safe }}
         </div>
     </div>

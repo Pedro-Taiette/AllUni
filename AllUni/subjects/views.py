@@ -26,9 +26,9 @@ def add_subject(request):
         form = SubjectForm(request.POST)
         if form.is_valid():
             subject = form.save(commit=False)
-            subject.user = request.user  
+            subject.user = request.user
             subject.save()
-            return redirect('subject_list')  
+            return redirect('subject_list')
     else:
         form = SubjectForm()
     return render(request, 'subjects/add_subject.html', {'form': form})
