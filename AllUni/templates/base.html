@@ -130,22 +130,12 @@
                                 <span>Anotações</span>
                             </a>
                         </li>
-                        {% if 'favorite_notes' in url_patterns %}
                         <li>
                             <a href="{% url 'favorite_notes' %}" class="flex items-center px-3 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-md">
                                 <i class="fas fa-star mr-3 text-gray-400"></i>
                                 <span>Favoritas</span>
                             </a>
                         </li>
-                        {% endif %}
-                        {% if 'recent_notes' in url_patterns %}
-                        <li>
-                            <a href="{% url 'recent_notes' %}" class="flex items-center px-3 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-md">
-                                <i class="fas fa-history mr-3 text-gray-400"></i>
-                                <span>Recentes</span>
-                            </a>
-                        </li>
-                        {% endif %}
                     </ul>
                 </div>
                 

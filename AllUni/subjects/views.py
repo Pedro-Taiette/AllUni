@@ -84,7 +84,7 @@ def search(request):
 @login_required
 def favorite_notes(request):
     """Exibe apenas as notas favoritas do usuário."""
-    notes = Note.objects.filter(subject__user=request.user, is_favorite=True)
+    notes = Note.objects.filter(subject__user=request.user, is_favorite=True).order_by('-created_at')
     return render(request, 'subjects/favorite_notes.html', {'notes': notes})
 
 @login_required
