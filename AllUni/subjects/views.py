@@ -37,11 +37,10 @@ def add_subject(request):
 def subject_detail(request, subject_id):
     subject = get_object_or_404(Subject, id=subject_id, user=request.user)
     notes = subject.notes.all()
-    notes_html = [{'title': note.title, 'content': note.get_html_content()} for note in notes]
     
     return render(request, 'subjects/subject_detail.html', {
         'subject': subject,
-        'notes': notes_html
+        'notes': notes
     })
 
 @login_required

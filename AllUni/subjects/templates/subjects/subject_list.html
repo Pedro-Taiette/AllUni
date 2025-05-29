@@ -1,48 +1,12 @@
 {% extends 'base.html' %}
 
+{% block title %}Matérias | AllUni{% endblock %}
+
 {% block content %}
-<div class="mb-6">
-    <form method="get" action="{% url 'search' %}">
-        <div class="flex">
-            <input type="text" name="q" placeholder="Pesquisar matérias e anotações..." 
-                   class="flex-grow px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                   value="{{ request.GET.q|default:'' }}">
-            <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-r-lg hover:bg-indigo-700">
-                <i class="fas fa-search"></i>
-            </button>
-        </div>
-    </form>
-</div>
-
-<div class="container mx-auto px-6 mb-4">
-    <div class="flex items-center text-sm text-gray-600">
-        <a href="{% url 'dashboard' %}" class="hover:text-indigo-600">Dashboard</a>
-        
-        {% if subject %}
-        <span class="mx-2">/</span>
-        <a href="{% url 'subject_list' %}" class="hover:text-indigo-600">Matérias</a>
-        <span class="mx-2">/</span>
-        <a href="{% url 'subject_detail' subject.id %}" class="hover:text-indigo-600">{{ subject.name }}</a>
-        
-        {% if note %}
-        <span class="mx-2">/</span>
-        <span class="text-gray-800">{{ note.title }}</span>
-        {% endif %}
-        
-        {% elif notes %}
-        <span class="mx-2">/</span>
-        <span class="text-gray-800">Todas as Anotações</span>
-        {% elif view == 'subject_list' %}
-        <span class="mx-2">/</span>
-        <span class="text-gray-800">Matérias</span>
-        {% endif %}
-    </div>
-</div>
-
-<div class="container mx-auto mt-8 px-6">
+<div class="container mx-auto">
     <div class="flex justify-between items-center mb-6">
-        <h2 class="text-3xl font-semibold text-gray-800">Minhas Matérias</h2>
-        <a href="{% url 'add_subject' %}" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300 flex items-center">
+        <h1 class="text-3xl font-bold text-gray-800">Minhas Matérias</h1>
+        <a href="{% url 'add_subject' %}" class="bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 flex items-center">
             <i class="fas fa-plus mr-2"></i> Nova Matéria
         </a>
     </div>
@@ -51,19 +15,24 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for subject in subjects %}
         <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition duration-300">
-            <div class="flex justify-between items-start">
+            <div class="flex justify-between items-start mb-4">
                 <h3 class="text-xl font-semibold text-gray-800">{{ subject.name }}</h3>
                 {% if subject.code %}
                 <span class="bg-gray-100 text-gray-600 text-xs font-semibold px-2 py-1 rounded">{{ subject.code }}</span>
                 {% endif %}
             </div>
             
-            <div class="mt-4 flex justify-between items-center">
-                <span class="text-sm text-gray-600">
-                    {{ subject.notes.count }} anotação{{ subject.notes.count|pluralize:"ões" }}
-                </span>
+            <div class="flex items-center text-sm text-gray-500 mb-4">
+                <i class="fas fa-sticky-note mr-2"></i>
+                <span>{{ subject.notes.count }} anotação{{ subject.notes.count|pluralize:"ões" }}</span>
+            </div>
+            
+            <div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">
                 <a href="{% url 'subject_detail' subject.id %}" class="text-indigo-600 hover:text-indigo-800">
                     Ver detalhes <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+                <a href="{% url 'add_note' subject.id %}" class="bg-green-100 text-green-700 py-1 px-3 rounded-full text-sm hover:bg-green-200 transition duration-300">
+                    + Nota
                 </a>
             </div>
         </div>
