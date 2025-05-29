@@ -9,9 +9,9 @@ class Subject(models.Model):
     name = models.CharField(max_length=200, unique=True)
     code = models.CharField(max_length=20, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    color = models.CharField(max_length=20, default="blue")
-    created_at = models.DateTimeField(default=timezone.now)  
-    updated_at = models.DateTimeField(default=timezone.now)  
+    color = models.CharField(max_length=20, default="blue")  
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(default=timezone.now)
     is_archived = models.BooleanField(default=False)
     
     def __str__(self):
@@ -39,8 +39,19 @@ class Note(models.Model):
         return f"{self.title} - {self.subject.name}"
     
     def get_html_content(self):
-        """Converte o conteúdo Markdown para HTML."""
-        return markdown2.markdown(self.content)
+        """Converte o conteúdo Markdown para HTML com extensões avançadas."""
+        import markdown2
+        extras = [
+            "fenced-code-blocks",
+            "tables",
+            "task-lists",
+            "highlightjs-lang",
+            "target-blank-links",
+            "header-ids",
+            "strike",
+            "footnotes"
+        ]
+        return markdown2.markdown(self.content, extras=extras)
     
     def get_reading_time(self):
         """Calcula o tempo estimado de leitura em minutos."""
