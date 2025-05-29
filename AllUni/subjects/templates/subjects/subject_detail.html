@@ -36,12 +36,23 @@
                 <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Código: {{ subject.code }}</span>
                 {% endif %}
             </div>
-            <a href="{% url 'add_note' subject.id %}" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300 flex items-center">
-                <i class="fas fa-plus mr-2"></i> Nova Nota
-            </a>
+            <div class="flex space-x-2">
+                {% if subject.is_archived %}
+                <a href="{% url 'unarchive_subject' subject.id %}" class="bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-300 flex items-center">
+                    <i class="fas fa-box-open mr-2"></i> Desarquivar
+                </a>
+                {% else %}
+                <a href="{% url 'archive_subject' subject.id %}" class="bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-300 flex items-center">
+                    <i class="fas fa-archive mr-2"></i> Arquivar
+                </a>
+                {% endif %}
+                <a href="{% url 'add_note' subject.id %}" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300 flex items-center">
+                    <i class="fas fa-plus mr-2"></i> Nova Nota
+                </a>
+            </div>
         </div>
     </div>
-
+    
     <!-- Lista de notas -->
     <h2 class="text-2xl font-semibold text-gray-800 mb-4">Anotações</h2>
     
@@ -54,9 +65,11 @@
                 {{ note.get_html_content|safe }}
             </div>
             <div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">
-                <span class="text-xs text-gray-500">
-                    {{ note.created_at|date:"d/m/Y" }}
-                </span>
+                <div class="flex items-center text-xs text-gray-500">
+                    <span>{{ note.created_at|date:"d/m/Y" }}</span>
+                    <span class="mx-2">•</span>
+                    <span><i class="far fa-clock mr-1"></i> {{ note.get_reading_time }} min</span>
+                </div>
                 <a href="{% url 'note_detail' note.id %}" class="text-indigo-600 hover:text-indigo-800 text-sm">
                     Ler mais <i class="fas fa-arrow-right ml-1"></i>
                 </a>

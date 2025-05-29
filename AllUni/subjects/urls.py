@@ -9,4 +9,10 @@ urlpatterns = [
     path('search/', views.search, name='search'),
     path('<int:subject_id>/', views.subject_detail, name='subject_detail'),
     path('<int:subject_id>/add_note/', views.add_note, name='add_note'),
+    path('notes/favorites/', views.favorite_notes, name='favorite_notes'),
+    path('subjects/archived/', views.archived_subjects, name='archived_subjects'),
+    path('subjects/<int:subject_id>/archive/', views.archive_subject, name='archive_subject'),
+    path('subjects/<int:subject_id>/unarchive/', views.unarchive_subject, name='unarchive_subject'),
+    path('notes/<int:note_id>/toggle-favorite/', views.toggle_favorite, name='toggle_favorite'),
+    path('notes/recent/', views.recent_notes, name='recent_notes'),
 ]
