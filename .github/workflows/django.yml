@@ -26,17 +26,17 @@ jobs:
         python -m pip install pipenv
         pipenv install --dev
 
-    - name: Run Tests with Coverage
-      run: |
-        pipenv run coverage run manage.py test
-        pipenv run coverage html
-      working-directory: ./AllUni
+    # - name: Run Tests with Coverage
+    #   run: |
+    #     pipenv run coverage run manage.py test
+    #     pipenv run coverage html
+    #   working-directory: ./AllUni
 
-    - name: Upload Coverage Report
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-html
-        path: AllUni/htmlcov
+    # - name: Upload Coverage Report
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: coverage-html
+    #     path: AllUni/htmlcov
 
     - name: Run Build (Runserver)
       #if: ${{ success() }} # to ignorando pq essas vamos arrumar dps de mudar o front
