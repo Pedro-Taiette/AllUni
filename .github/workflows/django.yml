@@ -11,8 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.13] # quero instabilidade fordasse 👿
-
+        python-version: [3.12]
     steps:
     - uses: actions/checkout@v4
 
@@ -31,14 +30,16 @@ jobs:
       run: |
         pipenv run coverage run manage.py test
         pipenv run coverage html
+      working-directory: ./AllUni
 
     - name: Upload Coverage Report
       uses: actions/upload-artifact@v4
       with:
         name: coverage-html
-        path: htmlcov
+        path: AllUni/htmlcov
 
     - name: Run Build (Runserver)
       if: ${{ success() }}
       run: |
         pipenv run python manage.py runserver --noreload --insecure
+      working-directory: ./AllUni
