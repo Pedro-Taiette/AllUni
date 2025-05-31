@@ -1,94 +1,130 @@
-# AllUni
+# 🎓 AllUni — *Your Academic Companion*
 
 ![AllUni Logo](https://img.shields.io/badge/AllUni-Your%20Academic%20Companion-blue)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/yourusername/alluni)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/yourusername/alluni)
-[![Docker](https://img.shields.io/docker/pulls/taiettedev/alluni)](https://hub.docker.com/r/taiettedev/alluni)
+[![Docker Pulls](https://img.shields.io/docker/pulls/taiettedev/alluni)](https://hub.docker.com/r/taiettedev/alluni)
 
-## 📚 Sobre
+---
 
-AllUni é uma aplicação web moderna para gerenciamento de anotações acadêmicas, projetada para funcionar como um "wrapper" para plataformas Moodle. Inspirado no Notion, o AllUni permite que estudantes organizem suas matérias e anotações de forma intuitiva e eficiente.
+## 📚 Sobre o Projeto
+
+> **AllUni** é uma plataforma web desenvolvida com carinho para estudantes que desejam centralizar, organizar e estilizar suas anotações acadêmicas.  
+Inspirado no Notion e integrado com o Moodle, o AllUni torna a rotina de estudos mais leve, bonita e produtiva ✨
 
 ![AllUni Screenshot](https://via.placeholder.com/800x400?text=AllUni+Screenshot)
 
-## ✨ Funcionalidades
+---
 
-- **Organização por Matérias**: Crie e gerencie suas matérias acadêmicas  
-- **Anotações com Markdown**: Escreva anotações ricas usando Markdown  
-- **Sistema de Favoritos**: Marque suas anotações mais importantes  
-- **Arquivamento**: Arquive matérias que não está mais cursando  
-- **Pesquisa Avançada**: Encontre rapidamente suas anotações e matérias  
+## ✨ Funcionalidades Principais
+
+🗂️ **Organização por Matérias** — Crie, edite e arquive suas matérias facilmente  
+📝 **Editor Markdown** — Escreva anotações ricas com formatação moderna  
+⭐ **Sistema de Favoritos** — Destaque conteúdos importantes com um clique  
+📦 **Arquivamento Inteligente** — Mantenha seu ambiente limpo com matérias arquivadas  
+🔍 **Pesquisa Avançada** — Encontre tudo rapidamente com filtros poderosos  
+
+---
 
 ## 🚀 Começando
 
-### Pré-requisitos
+### 🔧 Pré-requisitos
 
-- Python 3.10+  
-- Pipenv
-### Instalação
+- ✅ Python 3.10+  
+- ✅ Pipenv  
+
+### ⚙️ Instalação Local
 
 1. Clone o repositório:
+   ```bash
+   git clone https://github.com/yourusername/alluni.git
+   cd AllUni
+   ```
 
-2. Crie o ambiente virtual:
-```bash
-pip install pipenv
-cd ./AllUni
-```
+2. Instale o `pipenv` (se ainda não tiver):
+   ```bash
+   pip install pipenv
+   ```
 
-3. Instale as dependências:
-```bash
-pipenv install
-```
+3. Instale as dependências do projeto:
+   ```bash
+   pipenv install
+   ```
 
-4. Ative o ambiente e execute as migrações:
-```bash
-pipenv shell
-python manage.py makemigrations
-python manage.py migrate
-```
+4. Ative o ambiente virtual e aplique as migrações:
+   ```bash
+   pipenv shell
+   python manage.py makemigrations
+   python manage.py migrate
+   ```
 
-6. Inicie o servidor:
-```bash
-python manage.py runserver
-```
+5. Inicie o servidor:
+   ```bash
+   python manage.py runserver
+   ```
 
-Acesse a aplicação em: [http://localhost:8000](http://localhost:8000)
+🖥️ Acesse a aplicação: [http://localhost:8000](http://localhost:8000)
 
-## 🧪 Testes
+---
 
-Para executar os testes:
+## 🧪 Testes Automatizados
+
+AllUni tem cobertura de testes **100% garantida** ✅
+
+Execute os testes com:
+
 ```bash
 coverage run manage.py test
-coverage html  # Gera relatório HTML de cobertura
+coverage html  # Gera o relatório HTML de cobertura
 ```
+
+---
 
 ## 🐳 Docker
 
-Para facilitar a implantação, disponibilizamos uma imagem Docker:
+Também oferecemos suporte completo via Docker:
 
 ```bash
 # Baixar a imagem
 docker pull taiettedev/alluni:latest
 
-# Executar o contêiner
+# Rodar o contêiner
 docker run -p 8000:8000 taiettedev/alluni:latest
 
-# Com persistência de dados
+# Com volume persistente de dados
 docker run -p 8000:8000 -v alluni_data:/app/data taiettedev/alluni:latest
 ```
 
-Link para a imagem Docker: [taiettedev/alluni](https://hub.docker.com/r/taiettedev/alluni)
+🔗 [Veja no Docker Hub](https://hub.docker.com/r/taiettedev/alluni)
 
-## 🔧 Tecnologias
+---
 
-- **Backend**: Django, Python  
-- **Frontend**: HTML, CSS (Tailwind), JavaScript  
-- **Banco de Dados**: SQLite (desenvolvimento), PostgreSQL (produção)  
-- **Containerização**: Docker  
-- **CI/CD**: GitHub Actions  
+## 🛠️ Tecnologias Utilizadas
+
+| Camada        | Tecnologias                            |
+|---------------|-----------------------------------------|
+| 🔙 Backend     | Django, Python                          |
+| 🎨 Frontend    | HTML, Tailwind CSS, JavaScript          |
+| 💾 Banco de Dados | SQLite (dev), PostgreSQL (produção)   |
+| 🐳 Containerização | Docker                                |
+| 🚀 CI/CD       | GitHub Actions                          |
+
+---
 
 ## 📄 Licença
 
-Este projeto está licenciado sob a licença MIT - veja o arquivo LICENSE para detalhes.
+Distribuído sob a licença MIT.  
+Consulte o arquivo [`LICENSE`](./LICENSE) para mais detalhes.
 
 ---
+
+## 🤝 Contribuindo
+
+Quer contribuir? Toda ajuda é bem-vinda!  
+Leia nosso guia de contribuição ou abra uma issue com sugestões, bugs ou ideias.
+
+---
+
+<p align="center">
+Desenvolvido por estudantes, para estudantes.
+</p>
