@@ -34,6 +34,7 @@ class Note(models.Model):
     created_at = models.DateTimeField(default=timezone.now)  
     updated_at = models.DateTimeField(default=timezone.now)  
     is_favorite = models.BooleanField(default=False)
+    tags = models.ManyToManyField('Tag', through='NoteTag', related_name='notes')
     
     def __str__(self):
         return f"{self.title} - {self.subject.name}"
@@ -94,7 +95,6 @@ class Tag(models.Model):
         if isinstance(notes, models.QuerySet):
             return notes.filter(tags=self)
         else:
-            # Fallback for list or other iterable
             note_ids = [note.id for note in notes]
             return self.notes.filter(id__in=note_ids)
 
