@@ -2,7 +2,7 @@ name: AllUni CI/CD
 
 on:
   push:
-    branches: [ main, feat-pipeline-patch-1]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
@@ -33,15 +33,15 @@ jobs:
         python -m pip install pipenv
         pipenv install --dev
 
-    # - name: Run tests
-    #   run: |
-    #     cd AllUni
-    #     pipenv run python manage.py test
+    - name: Run tests
+      run: |
+        cd AllUni
+        pipenv run python manage.py test
 
   build-and-deploy:
     # needs: test
     runs-on: ubuntu-latest
-    # if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main')
 
     steps:
     - uses: actions/checkout@v4
