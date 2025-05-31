@@ -34,7 +34,6 @@ class Note(models.Model):
     created_at = models.DateTimeField(default=timezone.now)  
     updated_at = models.DateTimeField(default=timezone.now)  
     is_favorite = models.BooleanField(default=False)
-    tags = models.ManyToManyField('Tag', through='NoteTag', related_name='notes')
     
     def __str__(self):
         return f"{self.title} - {self.subject.name}"
