@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ] # da pra colocar outras branchs
+    branches: [ main ]
 
 jobs:
   test:
@@ -19,8 +19,7 @@ jobs:
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
-        python-version: ${{ matrix.python-version }} # quero instabilidade fordasse 👿
-# eu sempre vo readicionar esse comentario
+        python-version: ${{ matrix.python-version }}
 
     - name: Cache pipenv cache
       uses: actions/cache@v4
@@ -34,38 +33,15 @@ jobs:
         python -m pip install pipenv
         pipenv install --dev
 
-    # - name: Run tests
-    #   run: |
-    #     cd AllUni
-    #     pipenv run python manage.py test
-
-    # - name: Run coverage
-    #   run: |
-    #     cd AllUni
-    #     pipenv run coverage run --source='.' manage.py test
-    #     pipenv run coverage report
-    #     pipenv run coverage html
-
-    #   # O coverage report ele é tipo o html mas em tempo real
-
-    # - name: Debug artifact path
-    #   run: |
-    #     ls -l AllUni/htmlcov || echo "htmlcov does not exist!"
-
-    # - name: Ensure coverage dir exists
-    #   run: mkdir -p AllUni/htmlcov
-
-    # - name: Upload coverage report
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: coverage-report
-    #     path: ${{ github.workspace }}/AllUni/htmlcov/
-    #     if-no-files-found: warn
+    - name: Run tests
+      run: |
+        cd AllUni
+        pipenv run python manage.py test
 
   build-and-deploy:
-    # needs: test
+    needs: test
     runs-on: ubuntu-latest
-    #if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
 
     steps:
     - uses: actions/checkout@v4
@@ -88,15 +64,3 @@ jobs:
         tags: |
           ${{ secrets.DOCKERHUB_USERNAME }}/alluni:latest
           ${{ secrets.DOCKERHUB_USERNAME }}/alluni:${{ github.sha }}
-
-    - name: Generate static site for GitHub Pages
-      run: |
-        mkdir -p _site
-        cp -r AllUni/htmlcov/* _site/
-        echo "<html><head><meta http-equiv=\"refresh\" content=\"0; url=index.html\"></head></html>" > _site/index.html
-
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./_site
