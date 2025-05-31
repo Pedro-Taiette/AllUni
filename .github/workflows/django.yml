@@ -1,45 +1,84 @@
-name: Django CI
+name: AllUni CI/CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main, master ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.13] # quero instabilidade fordasse 👿
+    
     steps:
-    - uses: actions/checkout@v4
-
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
       with:
-        python-version: ${{ matrix.python-version }}
-
-    - name: Install Dependencies
+        python-version: '3.13'
+        
+    - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        python -m pip install pipenv
+        pip install pipenv
         pipenv install --dev
-
-    # - name: Run Tests with Coverage
-    #   run: |
-    #     pipenv run coverage run manage.py test
-    #     pipenv run coverage html
-    #   working-directory: ./AllUni
-
-    # - name: Upload Coverage Report
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: coverage-html
-    #     path: AllUni/htmlcov
-
-    - name: Run Build (Runserver)
-      #if: ${{ success() }} # to ignorando pq essas vamos arrumar dps de mudar o front
+        
+    - name: Run tests
       run: |
-        pipenv run python manage.py runserver --noreload --insecure
-      working-directory: ./AllUni
+        cd AllUni
+        pipenv run python manage.py test
+        
+    - name: Run coverage
+      run: |
+        cd AllUni
+        pipenv run coverage run --source='.' manage.py test
+        pipenv run coverage report
+        pipenv run coverage html
+        
+      # O coverage report ele é tipo o html mas em tempo real
+      
+    - name: Upload coverage report
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report
+        path: AllUni/htmlcov/ # é o report E o html
+        
+  build-and-deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+      
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: ./Containerfile
+        push: true
+        tags: |
+          ${{ secrets.DOCKERHUB_USERNAME }}/alluni:latest
+          ${{ secrets.DOCKERHUB_USERNAME }}/alluni:${{ github.sha }}
+        
+    - name: Generate static site for GitHub Pages
+      run: |
+        mkdir -p _site
+        cp -r AllUni/htmlcov/* _site/
+        echo "<html><head><meta http-equiv=\"refresh\" content=\"0; url=index.html\"></head></html>" > _site/index.html
+        
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./_site
