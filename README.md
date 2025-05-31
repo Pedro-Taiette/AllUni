@@ -5,23 +5,23 @@ Esse é um projeto que visa agir como um "wrapper" de anotações para aplicaç�
 
 
 ## Migrations
-``bash
+```bash
 python manage.py makemigrations
 ```
-``bash
+```bash
 python manage.py migrate
 ```
 
 
 ## Rodar testes
-``bash
+```bash
 coverage run manage.py test
 ```
-``bash
+```bash
 coverage html
 ```
 
 ## Rodar a aplicação
-``bash
+```bash
 python manage.py runserver
 ```
