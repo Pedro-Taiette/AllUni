@@ -9,59 +9,76 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+    strategy:
+      matrix:
+        python-version: [3.10, 3.11, 3.12, 3.13]
+
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
-        python-version: '3.13' # quero instabilidade fordasse 👿
+        python-version: ${{ matrix.python-version }} # quero instabilidade fordasse 👿
 # eu sempre vo readicionar esse comentario
-        
+
+    - name: Cache pipenv cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/Pipfile.lock') }}
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         python -m pip install pipenv
         pipenv install --dev
-        
+
     - name: Run tests
       run: |
         cd AllUni
         pipenv run python manage.py test
-        
+
     - name: Run coverage
       run: |
         cd AllUni
         pipenv run coverage run --source='.' manage.py test
         pipenv run coverage report
         pipenv run coverage html
-        
+
       # O coverage report ele é tipo o html mas em tempo real
-      
+
+    - name: Debug artifact path
+      run: |
+        ls -l AllUni/htmlcov || echo "htmlcov does not exist!"
+
+    - name: Ensure coverage dir exists
+      run: mkdir -p AllUni/htmlcov
+
     - name: Upload coverage report
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: coverage-report
-        path: AllUni/htmlcov/ # é o report E o html
-        
+        path: ${{ github.workspace }}/AllUni/htmlcov/
+        if-no-files-found: warn
+
   build-and-deploy:
     needs: test
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
-    
+
     steps:
-    - uses: actions/checkout@v3
-    
+    - uses: actions/checkout@v4
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
-      
+
     - name: Login to Docker Hub
       uses: docker/login-action@v2
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-        
+
     - name: Build and push Docker image
       uses: docker/build-push-action@v4
       with:
@@ -71,13 +88,13 @@ jobs:
         tags: |
           ${{ secrets.DOCKERHUB_USERNAME }}/alluni:latest
           ${{ secrets.DOCKERHUB_USERNAME }}/alluni:${{ github.sha }}
-        
+
     - name: Generate static site for GitHub Pages
       run: |
         mkdir -p _site
         cp -r AllUni/htmlcov/* _site/
         echo "<html><head><meta http-equiv=\"refresh\" content=\"0; url=index.html\"></head></html>" > _site/index.html
-        
+
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
