@@ -70,3 +70,33 @@ class Note(models.Model):
         from django.utils import timezone
         import datetime
         return self.updated_at >= (timezone.now() - datetime.timedelta(days=days))
+
+class Tag(models.Model):
+    name = models.CharField(max_length=30)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    notes = models.ManyToManyField('Note', through='NoteTag', related_name='tags')
+    created_at = models.DateTimeField(default=timezone.now)  
+    updated_at = models.DateTimeField(default=timezone.now)
+
+    def get_related_notes(self):
+        return self.notes.all()
+
+    def get_filter_from_notes(self, notes):
+        """
+        Filters the given notes to return only those associated with this tag.
+
+        Args:
+            notes (QuerySet or iterable): A list or queryset of Note instances.
+
+        Returns:
+            QuerySet: Notes that are both in the given input and tagged with this Tag.
+        """
+        if isinstance(notes, models.QuerySet):
+            return notes.filter(tags=self)
+        else:
+            note_ids = [note.id for note in notes]
+            return self.notes.filter(id__in=note_ids)
+
+class NoteTag(models.Model):
+    note = models.ForeignKey(Note, on_delete=models.CASCADE)
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
