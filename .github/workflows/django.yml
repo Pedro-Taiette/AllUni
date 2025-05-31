@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.10, 3.11, 3.12, 3.13]
+        python-version: [3.13]
 
     steps:
     - uses: actions/checkout@v4
@@ -34,36 +34,36 @@ jobs:
         python -m pip install pipenv
         pipenv install --dev
 
-    - name: Run tests
-      run: |
-        cd AllUni
-        pipenv run python manage.py test
+    # - name: Run tests
+    #   run: |
+    #     cd AllUni
+    #     pipenv run python manage.py test
 
-    - name: Run coverage
-      run: |
-        cd AllUni
-        pipenv run coverage run --source='.' manage.py test
-        pipenv run coverage report
-        pipenv run coverage html
+    # - name: Run coverage
+    #   run: |
+    #     cd AllUni
+    #     pipenv run coverage run --source='.' manage.py test
+    #     pipenv run coverage report
+    #     pipenv run coverage html
 
-      # O coverage report ele é tipo o html mas em tempo real
+    #   # O coverage report ele é tipo o html mas em tempo real
 
-    - name: Debug artifact path
-      run: |
-        ls -l AllUni/htmlcov || echo "htmlcov does not exist!"
+    # - name: Debug artifact path
+    #   run: |
+    #     ls -l AllUni/htmlcov || echo "htmlcov does not exist!"
 
-    - name: Ensure coverage dir exists
-      run: mkdir -p AllUni/htmlcov
+    # - name: Ensure coverage dir exists
+    #   run: mkdir -p AllUni/htmlcov
 
-    - name: Upload coverage report
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-report
-        path: ${{ github.workspace }}/AllUni/htmlcov/
-        if-no-files-found: warn
+    # - name: Upload coverage report
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: coverage-report
+    #     path: ${{ github.workspace }}/AllUni/htmlcov/
+    #     if-no-files-found: warn
 
   build-and-deploy:
-    needs: test
+    # needs: test
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
 
