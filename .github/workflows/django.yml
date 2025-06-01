@@ -33,10 +33,17 @@ jobs:
         python -m pip install pipenv
         pipenv install --dev
 
-    - name: Run tests
+    - name: Run tests with coverage
       run: |
         cd AllUni
-        pipenv run python manage.py test
+        pipenv run coverage run manage.py test
+        pipenv run coverage html
+
+    - name: Upload coverage html as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-html
+        path: AllUni/htmlcov
 
   build-and-deploy:
     needs: test
@@ -64,3 +71,26 @@ jobs:
         tags: |
           ${{ secrets.DOCKERHUB_USERNAME }}/alluni:latest
           ${{ secrets.DOCKERHUB_USERNAME }}/alluni:${{ github.sha }}
+
+  coverage-report:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Download coverage html artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-html
+          path: htmlcov
+
+      - name: Deploy coverage report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: htmlcov
+          publish_branch: gh-pages
+          force_orphan: true
