@@ -18,5 +18,15 @@ def main():
     execute_from_command_line(sys.argv)
 
 
-if __name__ == '__main__': # pragma: no cover
+if __name__ == '__main__':
     main()
+    
+    if len(sys.argv) > 1 and sys.argv[1] == 'runserver_uvicorn':
+        import uvicorn
+        uvicorn.run(
+            "AllUni.asgi:application",
+            host="0.0.0.0",
+            port=8000,
+            reload=True,
+            log_level="info"
+        )
