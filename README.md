@@ -9,11 +9,13 @@
 
 ## 📚 Sobre o Projeto
 
-> **AllUni** é uma plataforma web desenvolvida com carinho para estudantes que desejam centralizar, organizar e estilizar suas anotações acadêmicas.  
-Inspirado no Notion e integrado com o Moodle, o AllUni torna a rotina de estudos mais leve, bonita e produtiva ✨
+> **AllUni**
+O AllUni é uma plataforma web desenvolvida para ajudar estudantes universitários a centralizar, organizar e personalizar suas anotações acadêmicas em um único lugar.
+> Inspirado por ferramentas modernas como o Notion, o AllUni vai além ao oferecer integração com o Moodle, possibilitando que os usuários acompanhem conteúdos das disciplinas diretamente pela plataforma. 
+> A proposta é simples: diminuir a bagunça digital enfrentada por muitos estudantes, trazendo uma interface limpa, intuitiva e funcional para o dia a dia universitário. A ideia surgiu da experiência pessoal do desenvolvedor, que sentia a necessidade de uma ferramenta leve, focada no contexto acadêmico, mas com a flexibilidade de um caderno digital moderno.
 
-![AllUni Screenshot](https://via.placeholder.com/800x400?text=AllUni+Screenshot)
-
+>🧩 Explore o protótipo do AllUni no Figma e veja como estamos transformando a experiência acadêmica!
+> 👉 [Acesse aqui o protótipo](https://www.figma.com/design/Xk6q1uKUOMR6USaXgwrdWO/Untitled?node-id=0-1&t=U4gamE1kLr5FLI7E-1)
 ---
 
 ## ✨ Funcionalidades Principais
