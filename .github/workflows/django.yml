@@ -33,6 +33,10 @@ jobs:
         python -m pip install pipenv
         pipenv install --dev
 
+    - name: Run collectstatic
+      run: pipenv run python manage.py collectstatic --noinput
+      working-directory: AllUni
+
     - name: Run tests with coverage
       run: |
         cd AllUni
