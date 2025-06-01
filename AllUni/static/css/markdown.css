@@ -92,17 +92,34 @@
     margin: 1em 0;
 }
 
-.markdown-content hr {
-    border: 0;
-    border-top: 1px solid #e2e8f0;
-    margin: 2em 0;
+.dark .markdown-content {
+    color: #e2e8f0;
 }
 
-.markdown-content .task-list-item {
-    list-style-type: none;
-    margin-left: -1.5em;
+.dark .markdown-content h1,
+.dark .markdown-content h2,
+.dark .markdown-content h3,
+.dark .markdown-content h4,
+.dark .markdown-content h5,
+.dark .markdown-content h6 {
+    color: #f7fafc;
 }
 
-.markdown-content .task-list-item input[type="checkbox"] {
-    margin-right: 0.5em;
+.dark .markdown-content blockquote {
+    border-left-color: #4a5568;
+    color: #a0aec0;
+}
+
+.dark .markdown-content pre,
+.dark .markdown-content code {
+    background-color: #2d3748;
+}
+
+.dark .markdown-content table th,
+.dark .markdown-content table td {
+    border-color: #4a5568;
+}
+
+.dark .markdown-content table th {
+    background-color: #2d3748;
 }
