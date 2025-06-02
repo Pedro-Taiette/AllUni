@@ -8,60 +8,62 @@
     <nav class="flex mb-6" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
-                <a href="{% url 'dashboard' %}" class="text-gray-700 hover:text-indigo-600">
+                <a href="{% url 'dashboard' %}" class="text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400">
                     <i class="fas fa-home mr-2"></i>Dashboard
                 </a>
             </li>
             <li>
                 <div class="flex items-center">
-                    <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
-                    <a href="{% url 'subject_list' %}" class="text-gray-700 hover:text-indigo-600">Matérias</a>
+                    <i class="fas fa-chevron-right text-gray-400 dark:text-gray-600 mx-2"></i>
+                    <a href="{% url 'subject_list' %}" class="text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400">Matérias</a>
                 </div>
             </li>
             <li>
                 <div class="flex items-center">
-                    <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
-                    <a href="{% url 'subject_detail' subject.id %}" class="text-gray-700 hover:text-indigo-600">{{ subject.name }}</a>
+                    <i class="fas fa-chevron-right text-gray-400 dark:text-gray-600 mx-2"></i>
+                    <a href="{% url 'subject_detail' subject.id %}" class="text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400">{{ subject.name }}</a>
                 </div>
             </li>
             <li aria-current="page">
                 <div class="flex items-center">
-                    <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
-                    <span class="text-gray-500">Nova Anotação</span>
+                    <i class="fas fa-chevron-right text-gray-400 dark:text-gray-600 mx-2"></i>
+                    <span class="text-gray-500 dark:text-gray-400">Nova Anotação</span>
                 </div>
             </li>
         </ol>
     </nav>
     
-    <div class="bg-white p-6 rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold text-gray-800 mb-6">Adicionar Nova Anotação para {{ subject.name }}</h1>
+    <div class="bg-white dark:bg-[#2c2c2c] p-6 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">
+            Adicionar Nova Anotação para {{ subject.name }}
+        </h1>
         
         <form method="post" class="space-y-6">
             {% csrf_token %}
             
             <div>
-                <label for="{{ form.title.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                <label for="{{ form.title.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Título*
                 </label>
                 {{ form.title.errors }}
                 <input type="text" name="{{ form.title.name }}" id="{{ form.title.id_for_label }}" 
-                       class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                       class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1e1e1e] text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                        required>
             </div>
             
             <div>
-                <label for="{{ form.content.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                <label for="{{ form.content.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Conteúdo*
                 </label>
                 {{ form.content.errors }}
                 <textarea name="{{ form.content.name }}" id="{{ form.content.id_for_label }}" rows="10"
-                          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                          class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1e1e1e] text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                           required></textarea>
-                <p class="text-sm text-gray-500 mt-1">Suporta formatação Markdown.</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Suporta formatação Markdown.</p>
             </div>
             
             <div class="flex justify-between pt-4">
-                <a href="{% url 'subject_detail' subject.id %}" class="text-gray-600 hover:text-gray-800">
+                <a href="{% url 'subject_detail' subject.id %}" class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200">
                     Cancelar
                 </a>
                 <button type="submit" class="bg-green-600 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition duration-300">

@@ -5,8 +5,8 @@
 {% block content %}
 <div class="container mx-auto">
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Matérias Arquivadas</h1>
-        <a href="{% url 'subject_list' %}" class="text-gray-600 hover:text-gray-800 py-2 px-4 rounded-lg border border-gray-300 flex items-center">
+        <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100">Matérias Arquivadas</h1>
+        <a href="{% url 'subject_list' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 rounded-lg border border-gray-300 dark:border-gray-600 flex items-center transition">
             <i class="fas fa-arrow-left mr-2"></i> Voltar para Matérias
         </a>
     </div>
@@ -14,24 +14,24 @@
     {% if subjects %}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for subject in subjects %}
-        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-gray-500 hover:shadow-lg transition duration-300">
+        <div class="bg-white dark:bg-[#2c2c2c] p-6 rounded-lg shadow-md border-l-4 border-gray-500 dark:border-gray-400 hover:shadow-lg transition duration-300">
             <div class="flex justify-between items-start mb-4">
-                <h3 class="text-xl font-semibold text-gray-800">{{ subject.name }}</h3>
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">{{ subject.name }}</h3>
                 {% if subject.code %}
-                <span class="bg-gray-100 text-gray-600 text-xs font-semibold px-2 py-1 rounded">{{ subject.code }}</span>
+                <span class="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs font-semibold px-2 py-1 rounded">{{ subject.code }}</span>
                 {% endif %}
             </div>
             
-            <div class="flex items-center text-sm text-gray-500 mb-4">
+            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-4">
                 <i class="fas fa-sticky-note mr-2"></i>
                 <span>{{ subject.get_note_count }} anotação{{ subject.get_note_count|pluralize:"ões" }}</span>
             </div>
             
-            <div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">
-                <a href="{% url 'subject_detail' subject.id %}" class="text-indigo-600 hover:text-indigo-800">
+            <div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+                <a href="{% url 'subject_detail' subject.id %}" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition">
                     Ver detalhes <i class="fas fa-arrow-right ml-1"></i>
                 </a>
-                <a href="{% url 'unarchive_subject' subject.id %}" class="bg-gray-100 text-gray-700 py-1 px-3 rounded-full text-sm hover:bg-gray-200 transition duration-300">
+                <a href="{% url 'unarchive_subject' subject.id %}" class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-1 px-3 rounded-full text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition duration-300">
                     <i class="fas fa-box-open mr-1"></i> Desarquivar
                 </a>
             </div>
@@ -39,13 +39,13 @@
         {% endfor %}
     </div>
     {% else %}
-    <div class="bg-white p-8 rounded-lg shadow-md text-center">
-        <div class="text-gray-400 text-6xl mb-4">
+    <div class="bg-white dark:bg-[#2c2c2c] p-8 rounded-lg shadow-md text-center">
+        <div class="text-gray-400 dark:text-gray-500 text-6xl mb-4">
             <i class="fas fa-archive"></i>
         </div>
-        <h3 class="text-xl font-semibold text-gray-700 mb-2">Nenhuma matéria arquivada</h3>
-        <p class="text-gray-600 mb-6">Você pode arquivar matérias que não está mais usando.</p>
-        <a href="{% url 'subject_list' %}" class="bg-indigo-600 text-white py-3 px-6 rounded-lg hover:bg-indigo-700 transition duration-300">
+        <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">Nenhuma matéria arquivada</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-6">Você pode arquivar matérias que não está mais usando.</p>
+        <a href="{% url 'subject_list' %}" class="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-800 text-white py-3 px-6 rounded-lg transition duration-300">
             Ver Matérias Ativas
         </a>
     </div>

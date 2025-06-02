@@ -1,12 +1,22 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Registrar - AllUni{% endblock %}
 
 {% block content %}
-<div class="container mx-auto mt-12 px-4">
-    <div class="max-w-sm w-full mx-auto bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
-        <h2 class="text-3xl font-semibold text-gray-800 dark:text-white text-center mb-6">Registrar no AllUni</h2>
-        
+<div class="flex items-center justify-center min-h-[calc(97vh-94px)]">
+    <div class="relative w-[380px] bg-white dark:bg-[#383838] p-8 rounded-xl shadow-lg border border-gray-200 dark:border-[#2c2c2c]">
+
+        <!-- Logo -->
+        <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+            <img src="{% static 'images/logo.png' %}" alt="AllUni" class="object-contain w-18 h-16" />
+            <span class="mt-1 text-gray-800 dark:text-white text-2xl font-semibold">AllUni</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-white text-center mb-4 mt-8">Registrar</h2>
+
         {% if form.non_field_errors %}
-            <div class="mb-4 text-red-600 text-sm bg-red-100 dark:bg-red-300 p-2 rounded-md">
+            <div class="mb-4 text-red-600 text-xs bg-red-100 p-2 rounded-md">
                 {% for error in form.non_field_errors %}
                     <p>{{ error }}</p>
                 {% endfor %}
@@ -16,32 +26,77 @@
         <form method="POST" novalidate>
             {% csrf_token %}
 
-            {% for field in form %}
-                <div class="mb-4">
-                    <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-600 dark:text-gray-300">
-                        {{ field.label }}
-                    </label>
-                    <input 
-                        type="{{ field.field.widget.input_type }}" 
-                        name="{{ field.name }}" 
-                        id="{{ field.id_for_label }}"
-                        value="{{ field.value|default_if_none:'' }}"
-                        class="mt-2 block w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-800 dark:text-white bg-white dark:bg-gray-700 {% if field.errors %}border-red-500{% else %}border-gray-300 dark:border-gray-600{% endif %}"
-                        {% if field.field.required %}required{% endif %}
-                    >
-                    {% if field.errors %}
-                        <p class="text-red-500 text-sm mt-1">{{ field.errors.0 }}</p>
-                    {% endif %}
-                </div>
-            {% endfor %}
+            <!-- Username -->
+            <div class="mb-4">
+                <label for="{{ form.username.id_for_label }}" class="block text-xs font-medium text-gray-700 dark:text-[#BBBBBB]">
+                    {{ form.username.label }}
+                </label>
+                <input
+                    type="{{ form.username.field.widget.input_type }}"
+                    name="{{ form.username.name }}"
+                    id="{{ form.username.id_for_label }}"
+                    value="{{ form.username.value|default_if_none:'' }}"
+                    class="mt-1 block w-full px-4 py-2 bg-white dark:bg-[#444444] text-gray-800 dark:text-white border rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 dark:border-[#444444] {% if form.username.errors %}border-red-500{% endif %}"
+                    required
+                    autofocus
+                />
+                {% if form.username.errors %}
+                    <p class="text-red-500 text-xs mt-1">{{ form.username.errors.0 }}</p>
+                {% else %}
+                    <p class="text-[#AAAA] text-[10px] mt-1">Letras, números e @/./+/-/_ apenas.</p>
+                {% endif %}
+            </div>
 
-            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline mb-4">
+            <!-- Password1 -->
+            <div class="mb-4">
+                <label for="{{ form.password1.id_for_label }}" class="block text-xs font-medium text-gray-700 dark:text-[#BBBBBB]">
+                    {{ form.password1.label }}
+                </label>
+                <input
+                    type="{{ form.password1.field.widget.input_type }}"
+                    name="{{ form.password1.name }}"
+                    id="{{ form.password1.id_for_label }}"
+                    class="mt-1 block w-full px-4 py-2 bg-white dark:bg-[#444444] text-gray-800 dark:text-white border rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 dark:border-[#444444] {% if form.password1.errors %}border-red-500{% endif %}"
+                    required
+                />
+                {% if form.password1.errors %}
+                    <p class="text-red-500 text-xs mt-1">{{ form.password1.errors.0 }}</p>
+                {% else %}
+                    <ul class="text-[#AAAA] text-[10px] list-disc list-inside mt-1 leading-tight">
+                        <li>Sua senha não pode ser muito parecida com o resto das suas informações pessoais.</li>
+                        <li>Sua senha precisa conter pelo menos 8 caracteres.</li>
+                        <li>Sua senha não pode ser uma senha comumente utilizada.</li>
+                        <li>Sua senha não pode ser inteiramente numérica.</li>
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Password2 -->
+            <div class="mb-6">
+                <label for="{{ form.password2.id_for_label }}" class="block text-xs font-medium text-gray-700 dark:text-[#BBBBBB]">
+                    {{ form.password2.label }}
+                </label>
+                <input
+                    type="{{ form.password2.field.widget.input_type }}"
+                    name="{{ form.password2.name }}"
+                    id="{{ form.password2.id_for_label }}"
+                    class="mt-1 block w-full px-4 py-2 bg-white dark:bg-[#444444] text-gray-800 dark:text-white border rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 dark:border-[#444444] {% if form.password2.errors %}border-red-500{% endif %}"
+                    required
+                />
+                {% if form.password2.errors %}
+                    <p class="text-red-500 text-xs mt-1">{{ form.password2.errors.0 }}</p>
+                {% else %}
+                    <p class="text-[#AAAA] text-[10px] mt-1">Informe a mesma senha informada anteriormente, para verificação.</p>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="w-40 block mx-auto bg-indigo-600 hover:bg-indigo-700 dark:bg-purple-600 dark:hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline mb-3 text-sm dark:text-black">
                 Registrar
             </button>
 
-            <p class="text-sm text-center text-gray-500 dark:text-gray-400">
+            <p class="text-xs text-center text-gray-500 dark:text-[#BBBBBB]">
                 Já tem uma conta? 
-                <a href="{% url 'login' %}" class="text-indigo-600 hover:underline">Entrar</a>
+                <a href="{% url 'login' %}" class="text-indigo-600 dark:text-purple-500 hover:underline">Entrar</a>
             </p>
         </form>
     </div>
