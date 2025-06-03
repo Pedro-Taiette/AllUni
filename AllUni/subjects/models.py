@@ -5,6 +5,7 @@ from django.utils.text import slugify
 from django.utils import timezone
 import markdown2
 
+
 class Subject(models.Model):
     name = models.CharField(max_length=200, unique=True)
     code = models.CharField(max_length=20, blank=True, null=True)
