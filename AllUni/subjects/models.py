@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django.utils.text import slugify
 from django.utils import timezone
 import markdown2
-from django.db.models.query import QuerySet
 
 
 class Subject(models.Model):
@@ -93,7 +92,7 @@ class Tag(models.Model):
         Returns:
             QuerySet: Notes that are both in the given input and tagged with this Tag.
         """
-        if isinstance(notes, models.query.QuerySet):
+        if isinstance(notes, models.QuerySet):
             return notes.filter(tags=self)
         else:
             note_ids = [note.id for note in notes]
