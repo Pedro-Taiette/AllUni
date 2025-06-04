@@ -29,7 +29,7 @@
             
             <div class="flex items-center text-sm text-gray-500 dark:text-[#BBBBBB] mb-4">
                 <i class="fas fa-sticky-note mr-2"></i>
-                <span>{{ subject.get_note_count }} anotação{{ subject.get_note_count|pluralize:"ões" }}</span>
+                <span>{{ subject.get_note_count }} {{ subject.get_note_count|pluralize:"anotação,anotações" }}</span>
             </div>
             
             <div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-100 dark:border-[#BBBBBB]">
