@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
-from .models import Subject, Note
-from .forms import SubjectForm, NoteForm
+from .models import Subject, Note, Tag, NoteTag
+from .forms import SubjectForm, NoteForm, TagForm
 
 @login_required
 def subject_list(request):
@@ -46,22 +46,92 @@ def subject_detail(request, subject_id):
 @login_required
 def add_note(request, subject_id):
     subject = get_object_or_404(Subject, id=subject_id, user=request.user)
+    user_tags = Tag.objects.filter(user=request.user)
+    
     if request.method == 'POST':
-        form = NoteForm(request.POST)
-        if form.is_valid():
-            note = form.save(commit=False)
-            note.subject = subject 
-            note.save()
+        form_data = {
+            'title': request.POST.get('title', ''),
+            'content': request.POST.get('content', ''),
+            'is_favorite': request.POST.get('is_favorite', False) == 'on'
+        }
+        
+        if form_data['title'] and form_data['content']:
+            note = Note.objects.create(
+                title=form_data['title'],
+                content=form_data['content'],
+                is_favorite=form_data['is_favorite'],
+                subject=subject
+            )
+            
+            tag_ids = request.POST.getlist('tags')
+            for tag_id in tag_ids:
+                try:
+                    tag = Tag.objects.get(id=tag_id, user=request.user)
+                    NoteTag.objects.create(note=note, tag=tag)
+                except (Tag.DoesNotExist, ValueError):
+                    pass
+                
             return redirect('subject_detail', subject_id=subject.id)
+        else:
+            form = NoteForm(form_data)
     else:
         form = NoteForm()
-    return render(request, 'subjects/add_note.html', {'form': form, 'subject': subject})
+            
+    return render(request, 'subjects/add_note.html', {
+        'form': form, 
+        'subject': subject,
+        'user_tags': user_tags
+    })
+
+@login_required
+def edit_note(request, note_id):
+    """Edita uma nota existente."""
+    note = get_object_or_404(Note, id=note_id, subject__user=request.user)
+    user_tags = Tag.objects.filter(user=request.user)
+    
+    if request.method == 'POST':
+        form_data = {
+            'title': request.POST.get('title', ''),
+            'content': request.POST.get('content', ''),
+            'is_favorite': request.POST.get('is_favorite') == 'on'
+        }
+        
+        if form_data['title'] and form_data['content']:
+            note.title = form_data['title']
+            note.content = form_data['content']
+            note.is_favorite = form_data['is_favorite']
+            note.save()
+            
+            NoteTag.objects.filter(note=note).delete()  # Remove todas as tags existentes
+            tag_ids = request.POST.getlist('tags')
+            for tag_id in tag_ids:
+                try:
+                    tag = Tag.objects.get(id=tag_id, user=request.user)
+                    NoteTag.objects.create(note=note, tag=tag)
+                except (Tag.DoesNotExist, ValueError):
+                    pass
+                    
+            return redirect('note_detail', note_id=note.id)
+        else:
+            form = NoteForm(form_data, instance=note)
+    else:
+        form = NoteForm(instance=note)
+    
+    current_tags = note.tags.all()
+    
+    return render(request, 'subjects/edit_note.html', {
+        'form': form, 
+        'note': note,
+        'user_tags': user_tags,
+        'current_tags': current_tags
+    })
 
 @login_required
 def search(request):
     query = request.GET.get('q', '')
     subjects = []
     notes = []
+    tags = []
     
     if query:
         subjects = Subject.objects.filter(
@@ -74,11 +144,17 @@ def search(request):
         ).filter(
             Q(title__icontains=query) | Q(content__icontains=query)
         )
+        
+        tags = Tag.objects.filter(
+            user=request.user,
+            name__icontains=query
+        )
     
     return render(request, 'subjects/search_results.html', {
         'query': query,
         'subjects': subjects,
         'notes': notes,
+        'tags': tags,
     })
 
 @login_required
@@ -126,3 +202,36 @@ def recent_notes(request):
     notes = Note.objects.filter(subject__user=request.user, created_at__gte=recent_date)
     return render(request, 'subjects/recent_notes.html', {'notes': notes})
 
+@login_required
+def tag_list(request):
+    """Lista todas as tags do usuário."""
+    tags = Tag.objects.filter(user=request.user)
+    return render(request, 'subjects/tag_list.html', {'tags': tags})
+
+@login_required
+def add_tag(request):
+    """Adiciona uma nova tag."""
+    if request.method == 'POST':
+        form = TagForm(request.POST)
+        if form.is_valid():
+            tag = form.save(commit=False)
+            tag.user = request.user
+            tag.save()
+            return redirect('tag_list')
+    else:
+        form = TagForm()
+    return render(request, 'subjects/add_tag.html', {'form': form})
+
+@login_required
+def delete_tag(request, tag_id):
+    """Exclui uma tag."""
+    tag = get_object_or_404(Tag, id=tag_id, user=request.user)
+    tag.delete()
+    return redirect('tag_list')
+
+@login_required
+def tagged_notes(request, tag_id):
+    """Exibe notas com uma tag específica."""
+    tag = get_object_or_404(Tag, id=tag_id, user=request.user)
+    notes = Note.objects.filter(notetag__tag=tag)
+    return render(request, 'subjects/tagged_notes.html', {'notes': notes, 'tag': tag})
