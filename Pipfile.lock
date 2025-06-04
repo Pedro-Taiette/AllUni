@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "623120dfaa58530170c84dff34e388884211b5da4d8ca1e12214866109ce571b"
+            "sha256": "13cca67d50715ebdc5bf623261aea6e99a9a611695f237bb2b52312bc10baf04"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -42,12 +42,12 @@
         },
         "django": {
             "hashes": [
-                "sha256:57fe1f1b59462caed092c80b3dd324fd92161b620d59a9ba9181c34746c97284",
-                "sha256:a9b680e84f9a0e71da83e399f1e922e1ab37b2173ced046b541c72e1589a5961"
+                "sha256:1a47f7a7a3d43ce64570d350e008d2949abe8c7e21737b351b6a1611277c6d89",
+                "sha256:91ceed4e3a6db5aedced65e3c8f963118ea9ba753fc620831c77074e620e7d83"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.10'",
-            "version": "==5.2.1"
+            "version": "==5.2"
         },
         "django-simplemde": {
             "hashes": [
@@ -105,15 +105,6 @@
             ],
             "markers": "python_version >= '3.8'",
             "version": "==0.5.3"
-        },
-        "tzdata": {
-            "hashes": [
-                "sha256:1a403fada01ff9221ca8044d701868fa132215d84beb92242d9acd2147f667a8",
-                "sha256:b60a638fcc0daffadf82fe0f57e53d06bdec2f36c4df66280ae79bce6bd6f2b9"
-            ],
-            "index": "pypi",
-            "markers": "python_version >= '2'",
-            "version": "==2025.2"
         },
         "uvicorn": {
             "hashes": [
