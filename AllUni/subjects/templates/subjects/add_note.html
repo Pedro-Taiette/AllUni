@@ -62,6 +62,30 @@
                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Suporta formatação Markdown.</p>
             </div>
             
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Tags
+                </label>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                    {% for tag in user_tags %}
+                    <div class="flex items-center">
+                        <input type="checkbox" name="tags" value="{{ tag.id }}" id="tag_{{ tag.id }}" 
+                               class="h-4 w-4 text-indigo-600 dark:text-purple-400 focus:ring-indigo-500 dark:focus:ring-purple-400 border-gray-300 dark:border-gray-600 rounded">
+                        <label for="tag_{{ tag.id }}" class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                            {{ tag.name }}
+                        </label>
+                    </div>
+                    {% empty %}
+                    <p class="text-sm text-gray-500 dark:text-gray-400 col-span-3">
+                        Nenhuma tag disponível. 
+                        <a href="{% url 'add_tag' %}" class="text-indigo-600 dark:text-purple-400 hover:underline">
+                            Criar uma tag
+                        </a>
+                    </p>
+                    {% endfor %}
+                </div>
+            </div>
+            
             <div class="flex justify-between pt-4">
                 <a href="{% url 'subject_detail' subject.id %}" class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200">
                     Cancelar
