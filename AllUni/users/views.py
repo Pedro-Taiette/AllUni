@@ -19,7 +19,14 @@ def dashboard_view(request):
     subject_count = Subject.objects.filter(user=request.user).count()
     note_count = Note.objects.filter(subject__user=request.user).count()
 
-    return render(request, 'users/dashboard.html', {
+    recent_subjects = Subject.objects.filter(
+        user=request.user,
+        is_archived=False
+    ).order_by('-created_at')[:3]
+
+    context = {
         'subject_count': subject_count,
         'note_count': note_count,
-    })
+        'recent_subjects': recent_subjects,
+    }
+    return render(request, 'users/dashboard.html', context)
