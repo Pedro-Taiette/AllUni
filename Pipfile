@@ -10,7 +10,6 @@ django-simplemde = "*"
 uvicorn = "*"
 gunicorn = "*"
 whitenoise = "*"
-tzdata = "*"
 
 [dev-packages]
 coverage = "*"
