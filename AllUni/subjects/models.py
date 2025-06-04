@@ -101,3 +101,9 @@ class Tag(models.Model):
 class NoteTag(models.Model):
     note = models.ForeignKey(Note, on_delete=models.CASCADE)
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.note.title} - {self.tag.name}"
+    
+    class Meta:
+        unique_together = ('note', 'tag')

@@ -3,8 +3,9 @@ from django.urls import reverse
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth.models import User
-from .models import Subject, Note
+from .models import Subject, Note, Tag, NoteTag
 import datetime
+import markdown2
 
 class SubjectTests(TestCase):
     
@@ -380,3 +381,64 @@ class NoteIsRecentlyUpdatedTest(TestCase):
 
         # Verifica com 2 dias (deve ser False)
         self.assertFalse(self.note.is_recently_updated(days=2))
+
+class TagModelTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='taguser', password='12345')
+        self.subject = Subject.objects.create(name="Test Subject", user=self.user)
+        self.note1 = Note.objects.create(title="Note 1", content="Content", subject=self.subject)
+        self.note2 = Note.objects.create(title="Note 2", content="Content", subject=self.subject)
+        self.tag = Tag.objects.create(name="important", user=self.user)
+        self.note_tag = NoteTag.objects.create(note=self.note1, tag=self.tag)
+
+    def test_get_related_notes(self):
+        related_notes = self.tag.get_related_notes()
+        self.assertEqual(related_notes.count(), 1)
+        self.assertEqual(related_notes.first(), self.note1)
+
+    def test_get_filter_from_notes_queryset(self):
+        queryset = Note.objects.all()
+        filtered = self.tag.get_filter_from_notes(queryset)
+        self.assertEqual(filtered.count(), 1)
+        self.assertEqual(filtered.first(), self.note1)
+
+    def test_get_filter_from_notes_list(self):
+        notes_list = [self.note1, self.note2]
+        filtered = self.tag.get_filter_from_notes(notes_list)
+        self.assertEqual(filtered.count(), 1)
+        self.assertEqual(filtered.first(), self.note1)
+
+    def test_note_tag_str(self):
+        self.assertEqual(str(self.note_tag), f"{self.note1.title} - {self.tag.name}")
+
+class NoteContentTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='contentuser', password='12345')
+        self.subject = Subject.objects.create(name="Test Subject", user=self.user)
+        self.note = Note.objects.create(
+            title="Markdown Test",
+            content="# Heading\n\n* Item 1\n* Item 2\n\n`code`",
+            subject=self.subject
+        )
+
+    def test_get_html_content(self):
+        html = self.note.get_html_content()
+        self.assertIn("Heading</h1>", html)
+        self.assertIn("<li>Item 1</li>", html)
+        self.assertIn("<code>code</code>", html)
+
+    def test_note_tag_creation(self):
+        tag = Tag.objects.create(name="test", user=self.user)
+        note_tag = NoteTag.objects.create(note=self.note, tag=tag)
+        self.assertEqual(note_tag.note, self.note)
+        self.assertEqual(note_tag.tag, tag)
+
+    extras = [
+            "fenced-code-blocks",
+            "tables",
+            "task-lists",
+            # Remover "header-ids" para evitar IDs automáticos
+            "target-blank-links",
+            "strike",
+            "footnotes"
+    ]
