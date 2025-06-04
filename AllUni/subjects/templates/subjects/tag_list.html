@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Tags | AllUni{% endblock %}
+
+{% block content %}
+<div class="container mx-auto">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100">Minhas Tags</h1>
+        <a href="{% url 'add_tag' %}" class="bg-indigo-600 hover:bg-indigo-700 dark:bg-purple-600 dark:hover:bg-purple-800 text-white py-2 px-4 rounded-lg transition duration-300 flex items-center">
+            <i class="fas fa-plus mr-2"></i> Nova Tag
+        </a>
+    </div>
+    
+    {% if tags %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for tag in tags %}
+        <div class="bg-white dark:bg-[#2c2c2c] p-6 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-lg transition duration-300">
+            <div class="flex justify-between items-start mb-4">
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">{{ tag.name }}</h3>
+                <span class="bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-300 text-xs font-semibold px-2 py-1 rounded">
+                    {{ tag.notes.count }} nota{{ tag.notes.count|pluralize }}
+                </span>
+            </div>
+            
+            <div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+                <a href="{% url 'tagged_notes' tag.id %}" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300">
+                    Ver notas <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+                <a href="{% url 'delete_tag' tag.id %}" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300" 
+                   onclick="return confirm('Tem certeza que deseja excluir esta tag?');">
+                    <i class="fas fa-trash"></i>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="bg-white dark:bg-[#2c2c2c] p-8 rounded-lg shadow-md text-center">
+        <div class="text-gray-400 dark:text-gray-500 text-6xl mb-4">
+            <i class="fas fa-tags"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">Nenhuma tag encontrada</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-6">Comece adicionando sua primeira tag!</p>
+        <a href="{% url 'add_tag' %}" class="bg-indigo-600 hover:bg-indigo-700 dark:bg-purple-600 dark:hover:bg-purple-800 text-white py-3 px-6 rounded-lg transition duration-300">
+            Adicionar Tag
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
