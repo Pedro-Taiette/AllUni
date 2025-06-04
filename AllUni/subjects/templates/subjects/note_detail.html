@@ -38,15 +38,6 @@
         <div class="flex justify-between items-center mb-6">
             <div>
                 <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">{{ note.title }}</h1>
-
-                <div class="flex flex-wrap gap-2 mb-4">
-                    {% for tag in note.tags.all %}
-                    <a href="{% url 'tagged_notes' tag.id %}" class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs font-semibold px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-600">
-                        {{ tag.name }}
-                    </a>
-                    {% endfor %}
-                </div>
-                
                 <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
                     <a href="{% url 'subject_detail' note.subject.id %}" class="text-indigo-600 dark:text-purple-400 dark:hover:text-purple-600 hover:text-indigo-800  mr-2">
                         {{ note.subject.name }}
