@@ -10,7 +10,7 @@
 ## 📚 Sobre o Projeto
 
 > **AllUni** é uma plataforma web desenvolvida com carinho para estudantes que desejam centralizar, organizar e estilizar suas anotações acadêmicas.  
-Inspirado no Notion e integrado com o Moodle, o AllUni torna a rotina de estudos mais leve, bonita e produtiva ✨
+Inspirado no Notion e integrado com o Moodle para melhor usabilidade em faculdades, o AllUni torna a rotina de estudos mais leve, bonita e produtiva ✨
 
 ![AllUni Screenshot](https://via.placeholder.com/800x400?text=AllUni+Screenshot)
 
